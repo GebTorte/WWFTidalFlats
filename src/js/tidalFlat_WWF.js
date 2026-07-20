@@ -11,7 +11,7 @@
 
 // 0. AOI and GLOBAL VARIABLES
 
-var site = ee.Geometry.Polygon([117.5, 32, 127, 41], null, false);
+var site = ee.Geometry.Polygon([117.5, 32, 127, 41], null, false); // rectangular bounding box of the yellow sea
 var globOptions = { 
   versionID: '_SR',
   outFolder: 'SR',
@@ -79,3 +79,30 @@ var reducer = ee.Reducer.min()
     .combine(ee.Reducer.intervalMean(90, 100).setOutputs(['intMn90100']), '', true)
     .combine(ee.Reducer.intervalMean(10, 90).setOutputs(['intMn1090']), '', true)
     .combine(ee.Reducer.intervalMean(25, 75).setOutputs(['intMn2575']), '', true);
+
+// 2. DATA IMPORTS
+
+// vectors
+var globCoast = ee.FeatureCollection('ft:1Hsoe_WwULJ23Nuj1wikGzfH_WQMtpDWOR3XpWkHk');
+var randomPointsPreComputed = ee.FeatureCollection('ft:1hVC5uIlWZQxtsapNsr5AzcLm1Vzo4I_DqjfNgNmN'); // Precomputed Training
+
+// landsat
+function generateLandsatCollection(){ //starting with landsat 7 because of the observation period
+  var L7collection = ee.ImageCollection('LANDSAT/LE7_SR')
+      .filterDate(globOptions.startDate,globOptions.endDate)
+      .map(landsatFunctions.applyFMask)
+      .select(globOptions.bands7, globOptions.bandSelect);
+  var L8collection = ee.ImageCollection('LANDSAT/LC8_SR')
+      .filterDate(globOptions.startDate, globOptions.endDate)
+      .map(landsatFunctions.applyFMask)
+      .select(globOptions.bands8, globOptions.bandSelect);
+  var collectionFull = ee.ImageCollection(L4collection
+      .merge(L5collection)
+      .merge(L7collection)
+      .merge(L8collection))
+      .filterBounds(site)
+      .filter(ee.Filter.intersects('.geo', globCoast.geometry(), null, null, 1000))
+      .filterMetadata('WRS_ROW', 'less_than', 120); 
+  return collectionFull;
+}
+var collection = generateLandsatCollection();
