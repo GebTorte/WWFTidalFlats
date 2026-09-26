@@ -1,8 +1,8 @@
 
-var coastBuffer    = ee.FeatureCollection('projects/earthobserver-cc-476010/assets/yellowsea_coasts_1km');
+var coastBuffer = ee.FeatureCollection('projects/earthobserver-cc-476010/assets/yellowsea_coasts_1km');
 
-// TODO define all tiles (load combined TIF)
-var loadedClassifiedTif = ee.Image('projects/earthobserver-cc-476010/assets/classified/yellowsea_tidalflats_2017_2019_tile2');
+// TODO define 
+var loadedClassifiedTif = ee.Image('projects/earthobserver-cc-476010/assets/classified/yellowsea_tidalflats_2017_2019_tile3');
 var imageExtent = loadedClassifiedTif.geometry().bounds();
 // 1. Load Murray et al. 2014 dataset
 
@@ -60,11 +60,11 @@ var transitionStats = areaImage.reduceRegion({
   scale: 30,
   maxPixels: 1e13,
   tileScale: 4,
-  crs: loadedClassifiedTif.projection()
+  crs: 'EPSG:32652' // loadedClassifiedTif.projection()
 });
 
 // TODO: show
-//print("Transition Breakdown (Sq Km):", transitionStats);
+print("Transition Breakdown (Sq Km):", transitionStats);
 
 
 Map.centerObject(coastBuffer, 8);
@@ -77,6 +77,7 @@ Map.addLayer(murray2014.clip(imageExtent).selfMask(), {palette: ['orange']}, 'Mu
   
 /////////////////////////////////
 // THE below part does not work yet
+// probably have to reproject to common crs
 /////////////////////////////////
 
 var tfStable = murray2014.eq(1)
