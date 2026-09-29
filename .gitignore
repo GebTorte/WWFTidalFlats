@@ -216,3 +216,14 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+
+# qgis
+*.aux.xml
+*.qgz
+
+# output/data
+output/*
+
+korea_studyarea/*
+
