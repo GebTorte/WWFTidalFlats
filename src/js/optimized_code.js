@@ -10,6 +10,7 @@ var epochStart = '2017-01-01';
 var epochEnd   = '2019-12-31';
 var epochLabel = '2017_2019';
 
+// TODO: use other buffer
 var coastBuffer    = ee.FeatureCollection('projects/lstcalculation/assets/yellowsea_coasts_1km');
 var trainingtable   = ee.FeatureCollection('projects/lstcalculation/assets/TrainingTable_YellowSea_2014_2016');
 
