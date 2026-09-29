@@ -216,3 +216,14 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+
+# local
+proj.qgz
+
+# qgis
+*.aux.xml
+*.qgz
+
+# output/data
+output/*
