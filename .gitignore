@@ -221,5 +221,9 @@ __marimo__/
 # local
 proj.qgz
 
-# TIFs
+# qgis
+*.aux.xml
+*.qgz
+
+# output/data
 output/*
